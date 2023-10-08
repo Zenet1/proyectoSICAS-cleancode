@@ -1,0 +1,70 @@
+.container-botones{
+    display: flex;
+    justify-content: center;
+}
+.btn-group{
+    width: auto;
+}
+.btn-escaneo{
+    background-color: #C68D2A;
+    color: white;
+}
+
+.wrapper-escaner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-texto, .container-icono{
+    display: flex;
+    justify-content: center;
+}
+
+.icono-validacion{
+    width: 50px;
+    height: 50px;
+}
+
+.container-boton{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-regresar{
+    background-color:#2D2558;;
+    color: white;
+}
+
+
+@media (min-width:600px){ 
+    .container-escaner{
+        max-width: 500px;
+        max-height: 500px;
+    }
+
+    .container-menu{
+        width: 500px;
+    }
+
+    .icono-validacion{
+        width: 80px;
+        height: 80px;
+    }
+}
+
+
+@media (min-width:1024px) { 
+    .icono-validacion{
+        width: 100px;
+        height: 100px;
+    }
+}

@@ -1,0 +1,59 @@
+<div class="container-fluid">
+    <div class="wrapper-descripcion">
+        <div class="descripcion">
+            <p>Ingresa la matrícula del alumno y el periodo para alertar a aquellos que compartieron aula con él</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="wrapper-formulario mb-3">
+                <div class="container-formulario">
+                    <form [formGroup]="formularioAlerta" (ngSubmit)="alertar()" class="row" ngNativeValidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="matricula">Matrícula:</label>
+                            <input id="matricula" formControlName="matricula" type="text" min="0" class="form-control" placeholder="Ej: 12345678" required>
+                        </div>
+                        <p class="mb-0">Periodo de asistencia:</p>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaInicio" class="form-label">Fecha incial:</label>
+                            <input id="fechaInicio" formControlName="fechaInicio" type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaFin" class="form-label">Fecha final:</label>
+                            <input id="fechaFin" formControlName="fechaFin" type="date" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaSuspension" class="form-label">Suspender afectado hasta el:</label>
+                            <input id="fechaSuspension" formControlName="fechaSuspension" type="date" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaSospechosos" class="form-label">Suspender sospechosos hasta el:</label>
+                            <input id="fechaSospechosos" formControlName="fechaSospechosos" type="date" class="form-control" required>
+                        </div>
+                        <div class="container-botones">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-danger">Alertar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div *ngIf="siAlertaEnviada" class="wrapper-afectados">
+                <div class="container-afectados">
+                    <h4 class="text-center">Afectados</h4>
+                    <p>Número de afectados: {{numAfectados}}.</p>
+                    <p class="mb-0">Grupos Afectados:</p>
+                    <ul>
+                        <ng-container *ngFor="let grupo of gruposAfectados">
+                            <li>Asignatura: {{grupo.NombreAsignatura}}, Grupo: {{grupo.Grupo}}.</li>
+                        </ng-container> 
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

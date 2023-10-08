@@ -1,0 +1,60 @@
+<div class="container-fluid">
+
+    <div class="wrapper-descripcion">
+        <div class="descripcion">
+            <p>Gestión de datos</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="wrapper-formulario mb-3">
+                <div class="container-formulario">
+                    <form [formGroup]="formularioBDSicei" (ngSubmit)="subirBDSicei()" ngNativeValidate>
+                        <div class="mb-3">
+                            <label for="archivos" class="form-label">Cargue los siguentes archivos para almacenar los datos:</label>
+                            <ul>
+                                <li class="break">AlumnosCargaDeAsignaturas.txt</li>
+                                <li class="break">AlumnosInscripcionEnPeriodoCurso.txt</li>
+                                <li class="break">AsignaturasALasQueSeInscribieronAlumnos.txt</li>
+                                <li class="break">HorariosSesionesGrupo.txt</li>
+                                <li class="break">PlanesDeEstudios.txt</li>
+                                <li class="break">ProfesoresConAlumnosInscritos.txt</li>
+                                <li class="break">administrativos.txt (opcional)</li>
+                            </ul>
+                            <input id="archivos" name="archivos" accept=".txt" (change)="archivosSeleccionados($event)" class="form-control" type="file" multiple required>
+                        </div>
+                        <div class="container-botones">
+                            <button type="submit" class="btn btn-success">Cargar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="wrapper-formulario mb-3">
+                <div class="container-formulario">
+                    <form [formGroup]="formActualizarDatos" (ngSubmit)="actualizarDatos()" ngNativeValidate>
+                        <div class="mb-3">
+                            <label for="archivosActualizar" class="form-label">Cargue los siguientes archivos para actualizar los datos:</label>
+                            <ul>
+                                <li class="break">ProfesoresConAlumnosInscritos.txt (opcional)</li>
+                                <li class="break">administrativos.txt (opcional)</li>
+                            </ul>
+                            <input id="archivosActualizar" name="archivosActualizar" accept=".txt" (change)="archivosActualizarSelecccionados($event)" class="form-control" type="file" multiple required>
+                        </div>
+                        <div class="container-botones">
+                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="wrapper-formulario">
+                <div class="container-accion">
+                    <p class="form-label">Eliminar datos: </p>
+                    <button (click)="eliminarDatos()" type="button" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

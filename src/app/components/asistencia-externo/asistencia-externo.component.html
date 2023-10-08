@@ -1,0 +1,48 @@
+<div class="container-fluid">
+    <div class="wrapper-descripcion mb-3">
+        <div class="container-descripcion">
+            <h3 class="text-center">Registro de asistencia</h3>
+        </div>
+    </div>
+
+    <div class="wrapper-oficinas row g-0 mb-3">
+        <div class="container-oficinas">
+            <p>Seleccione las oficinas a las que desee asistir:</p>
+            <div class="oficinas">
+                <form [formGroup]="formularioAsistenciaExterno" (ngSubmit)="enviarAsistencia()" ngNativeValidate>
+                    <div formArrayName="oficinas" class="form-group mb-3" *ngFor="let oficina of listaOficinas; let i = index">
+                        <div [formGroupName]="i">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="respuesta" value="" id="oficina_{{i+1}}">
+                                <label class="form-check-label" for="oficina_{{i+1}}">
+                                  {{oficina.NombreOficina}}, Departamento {{oficina.Departamento}}, {{oficina.NombreEdificio}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fecha mb-3">
+                        <label for="fechaAsistencia" class="form-label">Fecha de asistencia:</label>
+                        <input id="fechaAsistencia" formControlName="fechaAsistencia" type="date" class="form-control" required>
+                    </div>
+                </form>
+                <div class="wrapper-enviar">
+                    <div class="container-enviar">
+                        <p>
+                            Al seleccionar "Enviar" se registrará su asistencia a las oficinas seleccionadas
+                            y se le enviará un código QR al correo proporcionado, que deberá presentar en la facultad
+                            para que se admita su entrada.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="container-boton">
+                    <div class="btn-group">
+                        <button (click)="enviarAsistencia()" class="btn btn-enviar">Enviar</button>
+                        <button (click)="cancelar()" class="btn btn-danger">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+.container-descripcion{
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper-formulario{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.container-formulario{
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.container-campo{
+    margin-bottom: 1rem;
+}
+
+textarea{
+    resize: none;
+    height: 64px;
+}
+
+.container-btn{
+    display: flex;
+    justify-content: center;
+}
+
+.container-tabla{
+    width: auto;
+    max-height: 450px;
+    overflow-y: scroll;
+}
+
+.card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (min-width:600px){ 
+    .container-formulario{
+        width: 400px;
+    }
+}
+
+@media (min-width:1024px) { 
+    .container-formulario{
+        margin-bottom: 0;
+        width: 100%;
+    }
+}

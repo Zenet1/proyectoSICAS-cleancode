@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="wrapper-descripcion mb-3">
+        <div class="container-descripcion">
+            <h3 class="text-center">Registro de asistencia</h3>
+        </div>
+    </div>
+
+    <div class="wrapper-enviar">
+        <div class="container-enviar">
+            <p>
+                Al seleccionar "Confirmar" se  se le enviará un código QR a su correo institucional que deberá presentar 
+                en la facultad para que se admita su entrada.
+            </p>
+            <div class="container-boton">
+                <div class="btn-group">
+                    <button (click)="enviarAsistencia()" class="btn btn-enviar">Confirmar</button>
+                    <button (click)="cancelar()" class="btn btn-danger">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

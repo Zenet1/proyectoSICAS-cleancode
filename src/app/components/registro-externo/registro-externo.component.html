@@ -1,0 +1,42 @@
+<div class="container-fluid">
+    <div class="titulo row g-0 mb-3">
+        <h3>Visitante externo</h3>
+    </div>
+    <div class="wrapper-formulario row g-0 mb-3">
+        <div class="container-formulario">
+            <h4 class="text-center">Registro</h4>
+            <form [formGroup]="formExterno" (ngSubmit)="registrarse()" ngNativeValidate>
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre(s):</label>
+                    <input id="nombre" type="text" class="form-control" formControlName="nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="apellidos" class="form-label">Apellidos:</label>
+                    <input id="apellidos" type="text" class="form-control" formControlName="apellidos" required>
+                </div>
+                <div class="mb-3">
+                    <label for="empresa" class="form-label">Empresa:</label>
+                    <input id="empresa" type="text" class="form-control" formControlName="empresa" required>
+                </div>
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo electrónico:</label>
+                    <input id="correo" type="email" class="form-control" formControlName="correo" required>
+                </div>
+                <div class="mb-3">
+                    <label for="facultad" class="form-label">Facultad:</label>
+                    <select id="facultad" class="form-select" formControlName="facultad" required>
+                        <ng-container *ngFor="let facultad of facultades, let i = index">
+                            <option [value]="facultad.SiglasFacultad">{{facultad.NombreFacultad}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+                <div class="container-boton">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-enviar">Enviar</button>
+                        <button type="button" (click)="cancelar()" class="btn btn-danger">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

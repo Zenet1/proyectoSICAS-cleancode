@@ -1,0 +1,39 @@
+.wrapper-descripcion{
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper-opciones{
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    height: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.btn-menu{
+    margin-bottom: 0.5rem;
+    background-color: #2D2558;
+    color: white;
+    width: 100%;
+}
+
+@media (min-width:600px){ 
+    .container-descripcion{
+        width: 500px;
+    }
+
+    .form-select{
+        width: 450px;
+    }
+}
+
+@media (min-width:1024px) { 
+    .container-descripcion{
+        width: 700px;
+    }
+
+    .wrapper-opciones{
+        margin-bottom: 0;
+    }
+}

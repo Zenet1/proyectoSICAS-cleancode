@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="wrapper-descripcion mb-3">
+        <div class="container-descripcion">
+            <h3 class="text-center">Registro de asistencia</h3>
+        </div>
+    </div>
+
+    <div class="wrapper-clases row g-0 mb-3">
+        <div class="container-clases">
+            <p>Estas son las clases disponibles para asistir el día de mañana:</p>
+
+            <div class="clases">
+                <ul>
+                    <li *ngFor="let clase of clases"  class="">
+                        {{clase.NombreAsignatura}}-
+                        Aula: {{clase.NombreSalon}}- Dia: {{clase.Dia}}- 
+                        Horario: {{clase.HoraInicioHorario}}-{{clase.HoraFinHorario}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-enviar">
+        <div class="container-enviar">
+            <p>
+                Al seleccionar "Enviar" se registrará su asistencia a las clases anteriormente listadas
+                y se le enviará un código QR a su correo institucional que deberá presentar en la facultad
+                para que se admita su entrada.
+            </p>
+            <div class="container-boton">
+                <div class="btn-group">
+                    <button (click)="enviarAsistencia()" class="btn btn-enviar">Enviar</button>
+                    <button (click)="cancelar()" class="btn btn-danger">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.container-descripcion{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.wrapper-descripcion{
+    display: flex;
+    justify-content: center;
+}
+
+.container-boton{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-escanear{
+    background-color: #C68D2A;
+    color: white;
+}

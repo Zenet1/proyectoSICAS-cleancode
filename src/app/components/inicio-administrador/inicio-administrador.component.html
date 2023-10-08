@@ -1,0 +1,48 @@
+<div class="container-fluid"> 
+    <div class="wrapper-contenido row g-0">
+        <div class="wrapper-opciones col-lg-2 shadow-sm">
+            <div class="wrapper-botones">
+                <div class="row">
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['alerta']" class="btn btn-menu">Alertar</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['cuestionario']" class="btn btn-menu">Cuestionario</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['capacidad-facultad']" class="btn btn-menu">Capacidad de la facultad</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['oficinas']" class="btn btn-menu">Gestionar oficinas</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['aulas']" class="btn btn-menu">Gestionar aulas</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['estadisticas']" class="btn btn-menu">Estadísticas</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['registro-usuarios']" class="btn btn-menu">Registrar usuarios</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['gestion-registros']" class="btn btn-menu">Gestionar registros de asistencia</button>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <button [routerLink]="['gestion-sicei']" class="btn btn-menu">Gestionar SICEI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="wrapper-descripcion">
+                <div class="container-descripcion">
+                    <h3 class="text-center">¡Bienvenido!</h3>
+                    <p class="text-center">
+                        Sesión iniciada como administrador con el usuario <strong>{{usuario}}</strong>.
+                    </p>
+                </div>
+            </div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

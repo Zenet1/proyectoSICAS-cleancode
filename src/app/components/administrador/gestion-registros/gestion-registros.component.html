@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="wrapper-descripcion">
+        <div class="descripcion">
+            <p>Gestionar los registros de asistencia</p>
+        </div>
+    </div>
+    <div class="acciones row">
+        <div class="wrapper-accion col-lg-3">
+            <div class="container-accion ">
+                <label class="form-label">Respaldar registros: </label>
+                <button (click)="respaldar()" type="button" class="btn btn-success">Respaldar</button>
+            </div>
+        </div>
+        <div class="wrapper-accion col-lg-6">
+            <div class="container-accion">
+                <p>Restaurar registros</p>
+                <form [formGroup]="formularioRestaurar" (ngSubmit)="restaurar()" ngNativeValidate>
+                    <div class="mb-3">
+                        <label for="archivo" class="form-label">Seleccione el archivo:</label>
+                        <input id="archivo" name="archivo" (change)="archivoSeleccionado($event)" class="form-control" type="file" accept=".txt" required>
+                    </div>
+                    <div class="container-boton">
+                        <button type="submit" class="btn btn-warning">Restaurar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="wrapper-accion col-lg-3">
+            <div class="container-accion">
+                <p class="form-label">Eliminar registros: </p>
+                <button (click)="eliminar()" [disabled]="!siArchivoRespaldado" type="button" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

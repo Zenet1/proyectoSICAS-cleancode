@@ -1,0 +1,28 @@
+.wrapper-descripcion{
+    display: flex;
+    justify-content: center;
+}
+
+.container-boton{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-iniciar{
+    background-color: #C68D2A;
+    color: white;
+}
+
+@media (min-width:600px){ 
+    .container-descripcion{
+        width: 500px;
+    }
+}
+
+@media (min-width:1024px) { 
+    .container-descripcion{
+        width: 700px;
+    }
+}

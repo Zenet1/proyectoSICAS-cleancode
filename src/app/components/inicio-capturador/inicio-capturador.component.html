@@ -1,0 +1,18 @@
+<div class="container-fluid"> 
+    <div class="wrapper-descripcion">
+        <div class="container-descripcion row g-0">
+            <h3 class="text-center">¡Bienvenido!</h3>
+            <p class="text-center">
+                Sesión iniciada con el usuario <strong>{{usuario}}</strong>.
+            </p>
+            <p>
+                Para escanear un código QR haga clic en el siguiente botón:
+            </p>
+            <div class="container-boton">
+                <div class="btn-group">
+                    <button type="button" [routerLink]="['/escaneo']" class="btn btn-escanear">Escanear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

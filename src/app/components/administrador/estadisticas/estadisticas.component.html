@@ -1,0 +1,118 @@
+<div class="container-fluid">
+    <div class="wrapper-descripcion">
+        <div class="descripcion">
+            <p>Obtenga estadísticas de la asistencia y los incidentes en la facultad</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columna col-lg-5 mb-3">
+            <div class="wrapper-formulario">
+                <div class="container-formulario">
+                    <form [formGroup]="formEstadisticas" (ngSubmit)="obtenerEstadisticas()" class="row" ngNativeValidate>
+                        <div class="col-md-6 mb-3">
+                            <strong class="mb-0">Tipo de estadística:</strong>
+                            <div class="form-check">
+                                <input  id="asistenciaAlumnos" class="form-check-input" type="radio" name="tipo" formControlName="tipo" value="asistenciasalumnos" (change)="eleccionTipo($event.target.value)" required>
+                                <label class="form-check-label" for="asistenciaAlumnos">Asistencia de Alumnos</label>
+                            </div>
+                            <div class="form-check">
+                                <input  id="asistenciaPersonal" class="form-check-input" type="radio" name="tipo" formControlName="tipo" value="asistenciapersonal" (change)="eleccionTipo($event.target.value)" required>
+                                <label class="form-check-label" for="asistenciaPersonal">Asistencia de Personal</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="incidentes" class="form-check-input" type="radio" name="tipo"  formControlName="tipo" value="incidentes" (change)="eleccionTipo($event.target.value)" required>
+                                <label class="form-check-label" for="incidentes">Casos COVID Alumnos</label>
+                            </div>
+                        </div>
+        
+                        <div *ngIf="!bandera" class="col-md-6 mb-3">
+                            <strong class="mb-0">Género:</strong>
+                            <div class="form-check">
+                                <input  id="hombres" class="form-check-input" type="radio" name="genero" formControlName="genero" value="Masculino" required>
+                                <label class="form-check-label" for="hombres">Hombres</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="mujeres" class="form-check-input" type="radio" name="genero"  formControlName="genero" value="Femenino">
+                                <label class="form-check-label" for="mujeres">Mujeres</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="todos" class="form-check-input" type="radio" name="genero"  formControlName="genero" value="todos">
+                                <label class="form-check-label" for="todos">Todos</label>
+                            </div>
+                        </div>
+        
+                        <strong class="mb-0">Periodo:</strong>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaInicio" class="form-label">Fecha incial:</label>
+                            <input id="fechaInicio" formControlName="fechaInicio" type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaFin" class="form-label">Fecha final:</label>
+                            <input id="fechaFin" formControlName="fechaFin" type="date" class="form-control" required>
+                        </div>
+        
+                        <div *ngIf="!bandera" class="mb-3">
+                            <label for="programa" class="form-label">Programa:</label>
+                            <select id="programa" class="form-select" formControlName="NombrePlan" required>
+                                <option value="todos">Todos</option>
+                                <ng-container *ngFor="let programa of programas, let i = index">
+                                    <option [value]="programa.NombrePlan">{{programa.NombrePlan}}</option>
+                                </ng-container>
+                            </select>
+                        </div>
+        
+                        <div class="container-botones">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-success">Obtener</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="columna2 col-lg-7">
+            <div class="wrapper-grafica">
+                <h4 class="text-center mb-0">Estadísticas</h4>
+                <div *ngIf="siEstadisticasObtenidas && (tipoEstadistica == 'alumno')" class="container-grafica">
+                    <ngx-charts-bar-horizontal-2d
+                        [animations]="animations"
+                        [customColors]="customColors"
+                        [schemeType]="schemeType"
+                        [results]="estadisticas"
+                        [gradient]="gradient"
+                        [xAxis]="showXAxis"
+                        [yAxis]="showYAxis"
+                        [legend]="showLegend"
+                        [legendPosition]="legendPosition"
+                        [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel"
+                        [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabel"
+                        (select)="onSelect($event)"
+                        (activate)="onActivate($event)"
+                        (deactivate)="onDeactivate($event)"
+                        >
+                    </ngx-charts-bar-horizontal-2d>
+                </div>
+                <div *ngIf="siEstadisticasObtenidas && (tipoEstadistica == 'personal')" class="container-grafica">
+                    <ngx-charts-bar-horizontal
+                        [animations]="animations"
+                        [customColors]="customColorsPersonal"
+                        [schemeType]="schemeType"
+                        [results]="estadisticas"
+                        [gradient]="gradient"
+                        [xAxis]="showXAxis"
+                        [yAxis]="showYAxis"
+                        [legend]="showLegend"
+                        [legendPosition]="legendPosition"
+                        [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabelPersonal"
+                        [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabelPersonal">
+                    </ngx-charts-bar-horizontal>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

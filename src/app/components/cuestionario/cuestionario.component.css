@@ -1,0 +1,44 @@
+.wrapper-descripcion{
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper-cuestionario{
+    display: flex;
+    justify-content: center;
+}
+
+.container-cuestionario{
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.form-select{
+    width: 80px;
+}
+
+.container-boton{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-enviar{
+    background-color: #C68D2A;
+    color: white;
+}
+
+@media (min-width:600px){ 
+    .container-cuestionario, .container-descripcion{
+        width: 500px;
+    }
+}
+
+@media (min-width:1024px) { 
+    .container-cuestionario, .container-descripcion{
+        width: 700px;
+    }
+}
