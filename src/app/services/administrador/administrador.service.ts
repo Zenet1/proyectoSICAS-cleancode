@@ -120,10 +120,11 @@ export class AdministradorService {
 
   obtenerEstadisticas(filtros:any){
     let tipo = filtros.tipo;
+    let datos;
     if(tipo == "asistenciapersonal"){
-      var datos = JSON.stringify({accion:"recuperarEstadisticaPersonal", contenido: filtros});
+      datos = JSON.stringify({accion:"recuperarEstadisticaPersonal", contenido: filtros});
     } else {
-      var datos = JSON.stringify({accion:"recuperarEstadisticaAlumno", contenido: filtros});
+      datos = JSON.stringify({accion:"recuperarEstadisticaAlumno", contenido: filtros});
     }
     return this.clienteHttp.post<any>(this.API_Administrador, datos);
   }

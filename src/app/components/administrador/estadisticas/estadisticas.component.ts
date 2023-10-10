@@ -62,7 +62,7 @@ export class EstadisticasComponent implements OnInit {
     });
     this.obtenerProgramas();
   }
-
+/* eslint-disable valid-typeof */
   obtenerEstadisticas(){
     this.siEstadisticasObtenidas = false;
     let validacionPeriodo:boolean = this.formEstadisticas.controls['fechaFin'].value >= this.formEstadisticas.controls['fechaInicio'].value;
@@ -85,7 +85,7 @@ export class EstadisticasComponent implements OnInit {
       alert("La fecha de inicio no puede ser mayor que la fecha de fin");
     }
   }
-
+/* eslint-enable valid-typeof */
   eleccionTipo(event){
     if(event == "asistenciapersonal"){
       this.bandera = true;
