@@ -1,0 +1,14 @@
+{
+    "exclude": [
+      "vendor/*",
+      "phpqrcode/*",
+      "img/*"
+    ],
+    "exclude-analysis": [
+      "vendor/*",
+      "phpqrcode/*",
+      "img/*"
+    ],
+    "php": "php",
+    "workers": 4
+  }
