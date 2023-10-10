@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 
 export class ExternoService {
-  API_Oficinas:string = '/DB_PHP/API/Oficinas.Ruta.php';
-  API_RegistroExterno:string = '/DB_PHP/API/RegistroExternos.Ruta.php';
-  API_Externo:string = '/DB_PHP/API/Externos.Ruta.php';
+  API_Oficinas:string = 'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Oficinas.Ruta.php';
+  API_RegistroExterno:string = 'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/RegistroExternos.Ruta.php';
+  API_Externo:string = 'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Externos.Ruta.php';
 
   constructor(private clienteHttp: HttpClient) { }
 

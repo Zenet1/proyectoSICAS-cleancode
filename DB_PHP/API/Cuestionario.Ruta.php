@@ -7,6 +7,8 @@ include_once("../Clases/Query.Class.php");
 include_once("../Clases/Email.Class.php");
 include_once("../Clases/Conexion.Class.php");
 
+$conexion = isset($_SESSION["Conexion"]) ? $_SESSION["Conexion"] : "FMAT";
+
 Conexion::ReconfigurarConexion($_SESSION["Conexion"]);
 $QueryObj = new Query();
 $PreguntaControl = new Pregunta($QueryObj);

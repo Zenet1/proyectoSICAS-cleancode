@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AlumnoService {
-  API_Alumnos: string = '/DB_PHP/API/Alumnos.Ruta.php';
+  API_Alumnos: string = 'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Alumnos.Ruta.php';
   
   constructor(private clienteHttp: HttpClient) { }
 

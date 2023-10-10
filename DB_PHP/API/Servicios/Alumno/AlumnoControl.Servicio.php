@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 class AlumnoControl
 {
     private Query $objQuery;
@@ -13,6 +13,10 @@ class AlumnoControl
 
     public function EnviarQRCorreo(array $Materias, GeneradorQr $qr, Conexion $conexion)
     {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            //session_id($datosAlumno->cuenta);
+            session_start();
+        }
         $sql_insertar = "INSERT INTO correos (correo,nombre,asunto,mensaje,contenidoQR,nombreQR,TipoCorreo)SELECT :cor,:nom,:asu,:mes,:con,:noq,:tip FROM DUAL WHERE NOT EXISTS (SELECT correo,TipoCorreo FROM correos WHERE correo=:cor AND TipoCorreo=:tip) LIMIT 1";
 
         $nombreImagen = "a" . $_SESSION["IDAlumno"];
@@ -45,6 +49,9 @@ class AlumnoControl
 
     public function ChecarIncidente()
     {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
         $sqla = "SELECT FechaLimiteSuspension FROM incidentes WHERE IDAlumno=? AND FechaLimiteSuspension > ?";
         $incognitas = array($_SESSION["IDAlumno"], $this->objFecha->FechaAct());
         $resultado = $this->objQuery->ejecutarConsulta($sqla, $incognitas);
@@ -53,6 +60,7 @@ class AlumnoControl
 
     private function GenerarContenidoQR(): string
     {
+        if(session_status() !== PHP_SESSION_ACTIVE) session_start();
         $qrContenido = "";
 
         $sqlIDReservacion = "SELECT RSV.IDReservaAlumno FROM reservacionesalumnos AS RSV INNER JOIN cargaacademica AS CGAC ON RSV.IDCarga=CGAC.IDCarga WHERE CGAC.IDAlumno=:ida AND RSV.FechaAlumno=:fchA";

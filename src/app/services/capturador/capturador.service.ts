@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class CapturadorService {
 
-  API:string = "/DB_PHP/API/Escaneador.Ruta.php";
+  API:string = "http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Escaneador.Ruta.php";
 
   constructor(private clienteHttp: HttpClient) { }
 

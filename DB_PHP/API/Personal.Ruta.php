@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 include_once("Servicios/Personal/ReservaPersonal.Servicio.php");
 include_once("../Clases/Query.Class.php");
@@ -7,8 +8,10 @@ include_once("../Clases/Qr.Class.php");
 include_once("../Clases/Conexion.Class.php");
 include_once("../Clases/Fechas.Class.php");
 
+$session = isset($_SESSION["Conexion"]) ? $_SESSION["Conexion"] : "FMAT";
+$Conexion = Conexion::ConexionInstacia($session);
+Conexion::ReconfigurarConexion($session);
 
-Conexion::ReconfigurarConexion($_SESSION["Conexion"]);
 $QueryObj = new Query();
 $QrControl = new GeneradorQr();
 $PersonalControl = new ReservaPersonal($QueryObj, Fechas::ObtenerInstancia());

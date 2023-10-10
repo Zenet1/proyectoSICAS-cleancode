@@ -8,63 +8,74 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class LoginService {
-  API: string = '/DB_PHP/API/Usuarios.Ruta.php';
-  API_Alumnos: string = '/DB_PHP/API/Alumnos.Ruta.php';
-  API_Facultades:string = '/DB_PHP/API/Servicios/Facultades.Servicio.php';
+  API_Usuarios: string = 
+  'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Usuarios.Ruta.php';
+  API_Alumnos: string = 
+  'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Alumnos.Ruta.php';
+  API_Facultades:string = 
+  'http://localhost:80/proyectoSICAS-cleancode/DB_PHP/API/Servicios/Facultades.Servicio.php';
   redirectUrl: string;
 
   @Output() getLoggedInName: EventEmitter<any> = new EventEmitter();
 
   constructor(private httpClient:HttpClient, private router:Router) { }
 
-  public iniciarSesion(datosCuenta:FormGroup, accionRol:any) {
-    var datos = JSON.stringify({accion:accionRol, cuenta:datosCuenta});
-    this.httpClient.post<any>(this.API, datos).subscribe(Users => {
-      if(Users != null && Users != "Sin cuenta valida"){
+  
+  public iniciarSesion(datosCuenta: FormGroup, accionRol: any) {
+    var datos = JSON.stringify({ accion: accionRol, cuenta: datosCuenta, facultad: "FMAT"});
+    this.httpClient.post<any>(this.API_Usuarios, datos).subscribe((Users) => {
+      if (Users != null && Users != 'Sin cuenta valida') {
         var token = JSON.stringify(Users);
-        if(Users.Rol == "Alumno"){
-          var accion = JSON.stringify({accion:"comprobarSuspension"});
-          this.httpClient.post<any>(this.API_Alumnos, accion).subscribe(
-            respuesta=>{
-              if(respuesta.length != 0){
-                alert("Actualmente no puedes asistir a la facultad debido a que te encuentras suspendido");
+        if (Users.Rol == 'Alumno') {
+          var datosAlumno = JSON.stringify({
+            accion: "comprobarSuspension",
+            cuenta: Users.Cuenta,
+            conexion: Users.Conexion
+          });
+          this.httpClient
+            .post<any>(this.API_Alumnos, datosAlumno)
+            .subscribe((respuesta) => {
+              if (respuesta.length != 0) {
+                alert(
+                  'Actualmente no puedes asistir a la facultad debido a que te encuentras suspendido'
+                );
               } else {
                 this.setToken(token);
                 this.getLoggedInName.emit(true);
                 location.href = '#/inicio-alumno';
               }
-            }
-          );
+            });
         } else {
           this.setToken(token);
           this.getLoggedInName.emit(true);
-          switch(Users.Rol) { 
-            case "Profesor":{
+          switch (Users.Rol) {
+            case 'Profesor': {
               location.href = '#/inicio-personal';
               break;
             }
-            case "Personal":{
+            case 'Personal': {
               location.href = '#/inicio-personal';
               break;
             }
-            case "Administrador": { 
+            case 'Administrador': {
               location.href = '#/inicio-administrador';
-              break; 
+              break;
             }
-            case "Capturador":{
+            case 'Capturador': {
               location.href = '#/inicio-capturador';
               break;
             }
-          } 
+          }
         }
       } else {
-        alert("Usuario o contraseña incorrectos");
+        alert('Usuario o contraseña incorrectos');
       }
     });
   }
 
   obtenerFacultades(){
     let datos = JSON.stringify({accion:"recuperarFacultades"});
+    console.log(datos);
     return this.httpClient.post<any>(this.API_Facultades, datos);
   }
 

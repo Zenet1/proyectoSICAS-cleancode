@@ -16,6 +16,11 @@ class Autenticar
 
     public function ValidarCuenta(array $contenido)
     {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_id($contenido["usuario"]);
+            session_start();
+        }
+        
         $incognitas = array("ctn" => $contenido["usuario"], "pss" => $contenido["contrasena"]);
         $resultado = $this->objQuery->ejecutarConsulta($this->objAunQ->VerificarLocal(), $incognitas);
 
@@ -64,6 +69,7 @@ class Autenticar
         $nombreCompleto .= $resultado[0]["ApellidoPaternoAlumno"] . " ";
         $nombreCompleto .= $resultado[0]["ApellidoMaternoAlumno"];
 
+        if(session_status() !== PHP_SESSION_ACTIVE) session_start();
         $_SESSION["Nombre"] = $nombreCompleto;
         $_SESSION["IDAlumno"] = $resultado[0]["IDAlumno"];
         $_SESSION["Matricula"] = $resultado[0]["Matricula"];

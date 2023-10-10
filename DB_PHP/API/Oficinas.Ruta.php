@@ -1,10 +1,11 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin:*");
-header("Access-Control-Allow-Credentials: true ");
-header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-header("Access-Control-Allow-Headers: X-Custom-Header, Origin, Content-Type , Authorisation , X-Requested-With");
-header("Content-Type: application/json; charset=UTF-8 ");
+if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+
+//header("Access-Control-Allow-Origin:*");
+//header("Access-Control-Allow-Credentials: true ");
+//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+//header("Access-Control-Allow-Headers: X-Custom-Header, Origin, Content-Type , Authorisation , X-Requested-With");
+//header("Content-Type: application/json; charset=UTF-8 ");
 
 include_once("Servicios/Administrador/Edificio.Servicio.php");
 include_once("Servicios/Administrador/Oficina.Servicio.php");
@@ -22,8 +23,10 @@ if (isset($_POST) && sizeof($_POST) > 0) {
     $accion = $datos->accion;
 }
 
-$Conexion = Conexion::ConexionInstacia($_SESSION["Conexion"]);
-Conexion::ReconfigurarConexion($_SESSION["Conexion"]);
+$session = isset($_SESSION["Conexion"]) ? $_SESSION["Conexion"] : "FMAT";
+
+$Conexion = Conexion::ConexionInstacia($session);
+Conexion::ReconfigurarConexion($session );
 $QueryObj = new Query();
 $EdificioControl = new Edificio($QueryObj);
 $OficinaControl = new Oficina($QueryObj);
