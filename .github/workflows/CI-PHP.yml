@@ -1,0 +1,22 @@
+name: CI PHP
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: "7.2"
+      - name: Unit Tests
+        uses: php-actions/phpunit@v3
+        with:
+          php_version: "7.2"
