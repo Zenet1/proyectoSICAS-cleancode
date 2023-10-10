@@ -1,0 +1,23 @@
+name: CI Angular
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.11.1'
+      - name: install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Test
+        run: npm run test
