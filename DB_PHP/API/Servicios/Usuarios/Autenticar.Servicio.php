@@ -2,6 +2,7 @@
 session_start();
 include_once("Autenticacion.Query.php");
 include_once("ldap_php_plano.php");
+include_once("../Clases/CookieHandler.Class.php");
 
 class Autenticar
 {
@@ -16,17 +17,21 @@ class Autenticar
 
     public function ValidarCuenta(array $contenido)
     {
+        /*
         if(session_status() !== PHP_SESSION_ACTIVE){
             session_id($contenido["usuario"]);
             session_start();
         }
+        */
         
         $incognitas = array("ctn" => $contenido["usuario"], "pss" => $contenido["contrasena"]);
         $resultado = $this->objQuery->ejecutarConsulta($this->objAunQ->VerificarLocal(), $incognitas);
 
         if (sizeof($resultado) !== 0) {
             $this->ObtenerDatosPorRol($resultado[0]);
-            $_SESSION["Conexion"] = $contenido["facultad"];
+
+            CookieHandler::setCookies("conexion", $contenido["facultad"]);
+
             $CuentaUsuario = array("Cuenta" => $resultado[0]["Cuenta"], "Rol" => $resultado[0]["Rol"]);
             echo json_encode($CuentaUsuario);
             exit();
@@ -34,17 +39,6 @@ class Autenticar
         echo json_encode("Sin cuenta valida");
         exit();
     }
-
-    public function ValidarCuentaINET(array $contenido)
-    {
-        if (validar_ldap($contenido["usuario"], $contenido["contrasena"]) === 1) {
-            $this->ActualizarDatos($contenido);
-            $this->ValidarCuenta($contenido);
-        } else {
-            $this->ValidarCuenta($contenido);
-        }
-    }
-
     private function ObtenerDatosPorRol(array $datos)
     {
         switch ($datos["Rol"]) {
@@ -69,11 +63,20 @@ class Autenticar
         $nombreCompleto .= $resultado[0]["ApellidoPaternoAlumno"] . " ";
         $nombreCompleto .= $resultado[0]["ApellidoMaternoAlumno"];
 
-        if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+        /*if(session_status() !== PHP_SESSION_ACTIVE) session_start();
         $_SESSION["Nombre"] = $nombreCompleto;
         $_SESSION["IDAlumno"] = $resultado[0]["IDAlumno"];
         $_SESSION["Matricula"] = $resultado[0]["Matricula"];
         $_SESSION["Correo"] = $resultado[0]["CorreoAlumno"];
+        */
+
+        $jsonCookies = array(
+            "Nombre" => $nombreCompleto,
+            "IDAlumno" => $resultado[0]["IDAlumno"],
+            "Matricula" => $resultado[0]["Matricula"],
+            "Correo" => $resultado[0]["CorreoAlumno"]
+        );
+        CookieHandler::setCookies("alumnosDatos", json_encode($jsonCookies));
     }
 
     private function PersonalDatos(string $sql, array $datosCuenta)
