@@ -16,15 +16,6 @@
                     <input id="contrasena" type="password" class="form-control" formControlName="contrasena" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="facultad" class="form-label">Facultad:</label>
-                    <select id="facultad" class="form-select" formControlName="facultad" required>
-                        <ng-container *ngFor="let facultad of facultades, let i = index">
-                            <option [value]="facultad.SiglasFacultad">{{facultad.NombreFacultad}}</option>
-                        </ng-container>
-                    </select>
-                </div>
-
                 <div class="container-boton">
                     <button type="submit" class="btn btn-iniciar-sesion">Ingresar</button>
                 </div>
