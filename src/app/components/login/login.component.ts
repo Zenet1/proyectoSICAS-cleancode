@@ -95,30 +95,15 @@ export class LoginComponent implements OnInit {
   }
 
   routerHandle (rol: string) {
-    switch (rol) {
-    case 'Alumno': {
-      this.router.navigateByUrl('inicio-alumno');
-      break;
-    }
-    case 'Administrador': {
-      this.router.navigateByUrl('inicio-administrador');
-      break;
-    }
-    case 'Capturador': {
-      this.router.navigateByUrl('inicio-capturador');
-      break;
-    }
-    case 'Profesor': {
-      this.router.navigateByUrl('inicio-personal');
-      break;
-    }
-    case 'Personal': {
-      this.router.navigateByUrl('inicio-personal');
-      break;
-    }
-    default: {
-      this.router.navigateByUrl('login');
-    }
-    }
+    const routes = {
+      Alumno: 'inicio-alumno',
+      Capturador: 'inicio-capturador',
+      Administrador: 'inicio-administrador',
+      Personal: 'inicio-personal',
+      Profesor: 'inicio-profesor',
+    };
+    const defaultRoute = 'login';
+    const route = routes[rol] || defaultRoute;
+    this.router.navigateByUrl(route);
   }
 }
