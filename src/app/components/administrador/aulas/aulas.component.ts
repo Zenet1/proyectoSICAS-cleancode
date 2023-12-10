@@ -28,19 +28,18 @@ export class AulasComponent implements OnInit {
   }
 
   async guardarAula(){
-    const nombreAula =this.formAula.get('aula').value;
+    const valorRecibido =this.formAula.get('aula').value;
+    const partes = valorRecibido.split('-');
+    const nombreSalon = partes[0]; 
+    const IDEdificio = parseInt(partes[1],10);
+   
     const capacidadAula = this.formAula.get('capacidad').value;
-    const idEdificio = 1;
-
     const data = {
-      nombre: nombreAula,
+      nombre: nombreSalon,
       capacidad: capacidadAula,
-      id_edificio: idEdificio,
+      id_edificio: IDEdificio,
     };
 
-    const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
-    const nombreEdificio = this.aulas[selectedIndex].edificio.NombreEdificio;
-    console.log('here',nombreEdificio);
     await this.aulasController.createAula(data).then(
       (respuesta)=>{
         this.obtenerAulas();

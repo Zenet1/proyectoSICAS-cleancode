@@ -23,7 +23,7 @@ export class AulaGateway implements IClassroom {
     return result;
   }
   async create(createClassroomDTO: CreateClassroomDTO): Promise<GetClassroomResponse> {
-    const response = await fetch(`${this.apiUrl}/`, {
+    const response = await fetch(`${this.apiUrl}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export class AulaGateway implements IClassroom {
       body: JSON.stringify(updateClassroomDTO),
     });
     if (!response.ok) {
-      throw new Error(`La solicitud para actualizar el classroom con ID ${id} falló`);
+      throw new Error('La solicitud falló');
     }
     const result = await response.json();
     return result.ok;
