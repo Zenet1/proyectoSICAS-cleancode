@@ -18,10 +18,8 @@ export class LoginGateway implements ILogin {
       }
       return response.json();
     }).then((data) => {
-      console.log('Datos de la API:', data);
       return data.data;
-    }).catch((error) => {
-      //console.log(error);
+    }).catch(() => {
       return null;
     });
   }

@@ -3,7 +3,8 @@ import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
 import { LoginService } from 'src/app/services/login/login.service';
-import { LoginController } from 'src/app/sesion/infraestructure/LoginController';
+import { LoginController } from 'src/app/sesion/infraestructure/SessionController';
+import { AccountDataDTO } from 'src/app/sesion/domain/dto/AccountDataDTO';
 
 @Component({
   selector: 'app-login',
@@ -76,18 +77,18 @@ export class LoginComponent implements OnInit {
   async iniciarSesion() {
     this.trimForm();
     try {
-      const response = await this.loginController.find(this.formLogin.value);
-      console.log(response);
+      const response: AccountDataDTO = await this.loginController.find(this.formLogin.value);
+      sessionStorage.setItem('usuario', JSON.stringify(response));
       this.routerHandle(response.Rol);
-      //agregar peticion para validar si el usuario esta baneado
     } catch (error) {
-      if (error instanceof Error && error.message === 'User Not Found') {
-        // El usuario no fue encontrado, puedes mostrar un mensaje al usuario
-        console.error('Usuario no encontrado. Verifica tus credenciales.');
-        alert('Usuario o contraseña incorrectos');
+      if (error instanceof Error) {
+        if(error.message === 'User Not Found') {
+          alert('Usuario o contraseña incorrectos');
+        } else if (error.message === 'User Is Ban') {
+          alert('El usuario esta baneado');
+        }
       } else {
         // Otro tipo de error, puedes manejarlo de acuerdo a tus necesidades
-        console.error('Error durante la autenticación:', error);
         alert('Error durante la autenticación');
       }
     }
