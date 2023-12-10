@@ -6,11 +6,11 @@
         <div class="col-8 col-lg-10 container-titulo">
             <a class="titulo" href="">Sistema de Control de Asistencia Segura</a>
         </div>
-        <div *ngIf="servicioLogin.isLoggedIn()" class="col-2 col-lg-1 container-menu">
+        <div *ngIf="isLoggedIn()" class="col-2 col-lg-1 container-menu">
             <div class="dropdown">
                 <button class="btn btn-cerrar-sesion dropdown-toggle" type="button" id="menu-navbar" data-bs-toggle="dropdown" aria-expanded="false"></button>
                 <ul class="dropdown-menu" aria-labelledby="menu-navbar">
-                  <li><button class="dropdown-item" (click)="cerrarSesion()" type="button">Cerrar sesión</button></li>
+                  <li><button class="dropdown-item" (click)="logout()" type="button">Cerrar sesión</button></li>
                 </ul>
             </div>
         </div>
