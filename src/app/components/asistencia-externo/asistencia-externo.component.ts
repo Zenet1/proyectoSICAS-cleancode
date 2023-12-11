@@ -2,107 +2,127 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AgendaDTO } from 'src/app/agenda/domain/dtos/AgendaDTO';
+import { OfficeDTO, OfficeIdDTO } from 'src/app/agenda/domain/dtos/OfficeDTO';
+import { AgendaController } from 'src/app/agenda/infraestructure/AgendaController';
+import { VisitorController } from 'src/app/registro-externo/intraestructure/VisitorController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
-import { ExternoService } from 'src/app/services/externo/externo.service';
 
 @Component({
   selector: 'app-asistencia-externo',
   templateUrl: './asistencia-externo.component.html',
-  styleUrls: ['./asistencia-externo.component.css']
+  styleUrls: ['./asistencia-externo.component.css'],
+  providers: [AgendaController, VisitorController],
 })
 export class AsistenciaExternoComponent implements OnInit {
-  listaOficinas:any;
-  formularioAsistenciaExterno:FormGroup;
+  officeList: OfficeDTO[];
+  externalAssistanceForm: FormGroup;
 
-  constructor(private datepipe:DatePipe, private servicioExterno:ExternoService, private servicioCookie:CookieService, private formBuilder:FormBuilder, private router:Router) { }
+  constructor(
+    private servicioCookie: CookieService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private agendaController: AgendaController,
+    private visitorController: VisitorController,
+  ) {}
 
   ngOnInit(): void {
-    if(!this.servicioCookie.checkCookie("cuestionarioContestado")){
+    if (!this.servicioCookie.checkCookie('cuestionarioContestado')) {
       this.router.navigateByUrl('login');
     } else {
-      this.formularioAsistenciaExterno = this.formBuilder.group({
-          oficinas: this.formBuilder.array([]),
-          fechaAsistencia:[""],
-        }
-      );
-      this.obtenerOficinas();
+      this.externalAssistanceForm = this.formBuilder.group({
+        oficinas: this.formBuilder.array([]),
+        fechaAsistencia: [''],
+      });
+      this.getOffices();
     }
   }
 
-  obtenerOficinas(){
-    this.servicioExterno.obtenerOficinas().subscribe(
-      respuesta=>{
-        this.listaOficinas = respuesta;
-        this.agregarCamposOficinas();
-      }
-    );
+  public async getOffices() {
+    const offices = await this.agendaController.getOffices();
+    this.officeList = offices;
+    this.addOfficeFields();
   }
 
-  get oficinasForm(){
-    return this.formularioAsistenciaExterno.get('oficinas') as FormArray;
+  private get oficinasForm() {
+    return this.externalAssistanceForm.get('oficinas') as FormArray;
   }
 
-  get fechaAsistencia(){
-    return this.formularioAsistenciaExterno.get('fechaAsistencia');
+  private get fechaAsistencia() {
+    return this.externalAssistanceForm.get('fechaAsistencia');
   }
 
-  agregarCamposOficinas(){
-    for (let index = 0; index < this.listaOficinas.length; index++) {
+  private addOfficeFields() {
+    for (let index = 0; index < this.officeList.length; index++) {
       const preguntaFormGroup = this.formBuilder.group({
-        respuesta:['']
+        respuesta: [''],
       });
       this.oficinasForm.push(preguntaFormGroup);
     }
   }
 
-  enviarAsistencia(){
-    this.servicioExterno.fechaActual().subscribe(
-      respuesta=>{
-        var fecha:string = respuesta;
-        var fechaSelect = this.formularioAsistenciaExterno.get('fechaAsistencia').value;
-        var fechaActual = this.datepipe.transform(fecha, 'yyyy-MM-dd');
-        var validacionFecha = fechaSelect >= fechaActual;
-        var oficinasSeleccionadas: Array<any> = [];
-        for (let index = 0; index < this.oficinasForm.length; index++) {
-          if(this.oficinasForm.controls[index].get("respuesta").value == true){
-            oficinasSeleccionadas.push(this.listaOficinas[index].IDOficina);
-          }
-        }
-        if(oficinasSeleccionadas.length > 0){
-          if(validacionFecha){
-            if (window.confirm("Si está seguro que desea asistir, confirme para finalizar")){
-              this.servicioExterno.enviarAsistencia(oficinasSeleccionadas, this.fechaAsistencia.value).subscribe(
-                respuesta=>{
-                  this.enviarQR(oficinasSeleccionadas, this.fechaAsistencia.value);
-                },
-                error=>{
-                  alert('Ha ocurrido un error al registrar tu reserva, intenténtalo de nuevo');
-                }
-              );
-            }
-          } else {
-            alert("No es posible realizar una reservación en el pasado");
-          }
-        } else {
-          alert("Selecciona al menos una oficina");
-        }
-      }
-    );
-  }
+  public async createVisit() {
+    const selectedOffices = this.formatSelectedOffices();
+    if(selectedOffices.length <= 0){
+      alert('Selecciona al menos una oficina');
+      return;
+    }
 
-  enviarQR(oficinasSeleccionadas, fechaAsistencia){
-    this.servicioExterno.enviarCorreo(oficinasSeleccionadas, fechaAsistencia).subscribe(
-      respuesta=>{
+    if(!this.validDate()){
+      alert('No es posible realizar una reservación en el pasado');
+      return;
+    }
+
+    if (
+      window.confirm(
+        'Si está seguro que desea asistir, confirme para finalizar'
+      )
+    ) {
+      const agendaDTO: AgendaDTO = {
+        IDExterno: this.visitorController.getItem().IDExterno,
+        correo: this.visitorController.getItem().correo,
+        fecha_agenda: this.formatDate(this.fechaAsistencia.value),
+        oficinas: selectedOffices,
+      };
+      try {
+        await this.agendaController.scheduleVisit(agendaDTO);
         alert('Se ha enviado un código QR a tu correo, que deberás presentar para entrar a la facultad');
         this.router.navigateByUrl('login');
-      },
-      error=>{
-        alert('Ha ocurrido un error al enviar el QR, intenténtalo de nuevo');
+      } catch (error) {
+        alert('Ocurrió un error al agendar su visita');
       }
-    );
+    }
   }
 
-  cancelar(){
+  private formatSelectedOffices(): OfficeIdDTO[] {
+    const offices = this.oficinasForm.controls.map((control: FormGroup, index: number) => {
+      if(control.get('respuesta').value == true) {
+        return {
+          IDOficina: this.officeList[index].IDOficina,
+        };
+      }
+    });
+    const filteredOffices = offices.filter((office) => office !== undefined);
+    return filteredOffices;
+  }
+  
+  private formatDate(date: string) {
+    const objectDate = new Date(date);
+    const year = objectDate.getFullYear();
+    const month = (objectDate.getMonth() + 1).toString().padStart(2, '0'); // Sumar 1 al mes ya que en JavaScript los meses van de 0 a 11
+    const day = objectDate.getDate().toString().padStart(2, '0');
+    const formatDate = year + '-' + month + '-' + day + 'T12:00:00.000Z';
+    return formatDate;
+  }
+
+  private validDate (): boolean {
+    const currentDate = new Date();
+    const selectedDate = new Date(this.fechaAsistencia.value);
+    const validDate = selectedDate >= currentDate;
+    return validDate;
+  }
+
+  public cancel() {
     this.router.navigateByUrl('login');
   }
 }
