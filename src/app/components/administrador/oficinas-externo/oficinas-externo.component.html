@@ -22,7 +22,7 @@
                         <label for="edificio" class="form-label">Edificio</label>
                         <select id="edificio" class="form-select" formControlName="edificio" required>
                             <ng-container *ngFor="let edificio of edificios">
-                                <option [value]="edificio.NombreEdificio">{{edificio.NombreEdificio}}</option>
+                                <option [value]="edificio.IDEdificio">{{edificio.NombreEdificio}}</option>
                             </ng-container>
                         </select>
                     </div>
@@ -56,7 +56,7 @@
                                     <tr *ngFor="let oficina of oficinas; let iControl=index">
                                         <td>{{oficina.NombreOficina}}</td>
                                         <td>{{oficina.Departamento}}</td>
-                                        <td>{{oficina.NombreEdificio}}</td>
+                                        <td>{{oficina.edificio.NombreEdificio}}</td>
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <button (click)="eliminarOficina(oficina.IDOficina, iControl)" class="btn btn-danger">Eliminar</button>

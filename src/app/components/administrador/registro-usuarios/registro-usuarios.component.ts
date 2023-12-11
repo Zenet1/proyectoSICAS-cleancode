@@ -5,7 +5,7 @@ import { AdministradorService } from 'src/app/services/administrador/administrad
 @Component({
   selector: 'app-registro-usuarios',
   templateUrl: './registro-usuarios.component.html',
-  styleUrls: ['./registro-usuarios.component.css']
+  styleUrls: ['./registro-usuarios.component.css'],
 })
 export class RegistroUsuariosComponent implements OnInit {
   
@@ -16,31 +16,31 @@ export class RegistroUsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.formRegistro = this.formBuilder.group({
-      nombre:[""],
-      apellidoPaterno: [""],
-      apellidoMaterno: [""],
-      usuario:[""],
-      contrasena:[""],
-      rol:[""]
+      nombre:[''],
+      apellidoPaterno: [''],
+      apellidoMaterno: [''],
+      usuario:[''],
+      contrasena:[''],
+      rol:[''],
     });
     this.obtenerRoles();
   }
 
   trimCampo(campo:any, valor:any){
-    var textoTrim = valor.trim();
+    const textoTrim = valor.trim();
     campo.setValue(textoTrim);
   }
 
   trimForm(){
-    this.trimCampo(this.formRegistro.controls["nombre"],this.formRegistro.controls["nombre"].value);
-    this.trimCampo(this.formRegistro.controls["apellidoPaterno"],this.formRegistro.controls["apellidoPaterno"].value);
-    this.trimCampo(this.formRegistro.controls["apellidoMaterno"],this.formRegistro.controls["apellidoMaterno"].value);
-    this.trimCampo(this.formRegistro.controls["usuario"],this.formRegistro.controls["usuario"].value);
+    this.trimCampo(this.formRegistro.controls['nombre'],this.formRegistro.controls['nombre'].value);
+    this.trimCampo(this.formRegistro.controls['apellidoPaterno'],this.formRegistro.controls['apellidoPaterno'].value);
+    this.trimCampo(this.formRegistro.controls['apellidoMaterno'],this.formRegistro.controls['apellidoMaterno'].value);
+    this.trimCampo(this.formRegistro.controls['usuario'],this.formRegistro.controls['usuario'].value);
   }
 
   obtenerRoles(){
     this.servicioAdmin.obtenerRoles().subscribe(
-      respuesta=>{
+      (respuesta)=>{
         this.roles = respuesta;
       }
     );
@@ -49,12 +49,12 @@ export class RegistroUsuariosComponent implements OnInit {
   registrarUsuario(){
     this.trimForm();
     this.servicioAdmin.registrarUsuario(this.formRegistro.value).subscribe(
-      respuesta=>{
-        alert("Se registró el usuario correctamente");
+      (respuesta)=>{
+        alert('Se registró el usuario correctamente');
         this.formRegistro.reset();
       },
-      error=>{
-        alert("Ocurrió un error al intentar registrar el usuario");
+      (error)=>{
+        alert('Ocurrió un error al intentar registrar el usuario');
       }
     );
   }
