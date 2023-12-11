@@ -5,6 +5,11 @@ export interface VisitorDTO {
     correo: string
 }
 
+export interface VisitorSessionDTO {
+    IDExterno: number
+    correo: string
+}
+
 export type GetVisitorIDResponse = {
-    IDExterno: number;
+    IDExterno: number
 }

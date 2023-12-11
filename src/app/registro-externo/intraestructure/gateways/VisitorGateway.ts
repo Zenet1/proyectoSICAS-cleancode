@@ -1,5 +1,5 @@
-import { GetVisitorIDResponse, VisitorDTO } from '../domain/dtos/VisitorDTO';
-import { IVisitor } from '../domain/interfaces/IVisitor';
+import { GetVisitorIDResponse, VisitorDTO } from '../../domain/dtos/VisitorDTO';
+import { IVisitor } from '../../domain/interfaces/IVisitor';
 
 export class visitorGateway implements IVisitor {
   public async auth(
@@ -21,7 +21,6 @@ export class visitorGateway implements IVisitor {
         );
       }
       const data = await response.json();
-      console.log(data.data);
       return data.data;
     } catch {
       return null;
