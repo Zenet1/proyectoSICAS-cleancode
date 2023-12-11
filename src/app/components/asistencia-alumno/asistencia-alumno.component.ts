@@ -1,64 +1,75 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlumnoService } from 'src/app/services/alumno/alumno.service';
+import { ReservationDTO } from 'src/app/reservacion/domain/dtos/ReservationDTO';
+import { SubjectDTO } from 'src/app/reservacion/domain/dtos/SubjectDTO';
+import { ConvertSubjectToMateria } from 'src/app/reservacion/domain/mappers/ConvertSubjectToMateria';
+import { ReservationController } from 'src/app/reservacion/infraestructure/controllers/ReservationController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
+import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
 
 @Component({
   selector: 'app-asistencia-alumno',
   templateUrl: './asistencia-alumno.component.html',
   styleUrls: ['./asistencia-alumno.component.css'],
+  providers: [ReservationController, SessionController],
 })
 export class AsistenciaAlumnoComponent implements OnInit {
-  clases:any;
- 
-  constructor(private servicioAlumno:AlumnoService, private servicioCookie:CookieService, private router:Router) { }
+  subjects: SubjectDTO[];
 
-  ngOnInit(): void {
-    if(!this.servicioCookie.checkCookie('cuestionarioContestado')){
+  constructor(
+    private servicioCookie: CookieService,
+    private router: Router,
+    private reservationController: ReservationController,
+    private sessionController: SessionController,
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    if (!this.servicioCookie.checkCookie('cuestionarioContestado')) {
       this.router.navigateByUrl('inicio-alumno');
     } else {
-      this.servicioAlumno.combrobarReservacion().subscribe(
-        (respuesta)=>{
-          if(respuesta == 'Aceptado'){
-            this.obtenerClases();
-          } else if (respuesta == 'Rechazado'){
+      try {
+        const response = await this.reservationController.getSubjects(this.sessionController.getItem().IDPersonal);
+        this.subjects = response;
+      } catch (error) {
+        if (error instanceof Error) {
+          if(error.message === 'User Has Reservation') {
             alert('Ya tiene una reservación para mañana');
-            this.router.navigateByUrl('inicio-alumno');
+          } else if(error.message === 'No Subjects Available') {
+            alert('No existe cupo para mañana');
           }
-        }
-      );
-    }
-  }
-
-  obtenerClases(){
-    this.servicioAlumno.obtenerClases().subscribe(
-      (respuesta)=>{
-        if(respuesta.length > 0){
-          this.clases = respuesta;
-        } else {
-          alert('No quedan cupos disponibles para mañana');
           this.router.navigateByUrl('inicio-alumno');
+        } else {
+          alert('Error con el servidor');
         }
       }
-    );
-  }
-
-  enviarAsistencia(){
-    if (window.confirm('Si está seguro que desea asistir, confirme para finalizar')){
-      this.servicioAlumno.enviarAsistencia(this.clases).subscribe(
-        (respuesta)=>{
-          alert('Se ha registrado tu reserva sastisfactoriamente y se ha enviado un código QR a tu correo, que deberás presentar para acceder a la facultad');
-          this.router.navigateByUrl('inicio-alumno');
-        },
-        (error)=>{
-          alert('Ha ocurrido un error al registrar tu reserva, intenténtalo de nuevo');
-        }
-      );
     }
   }
 
-  cancelar(){
+  public async sendAssistance() {
+    if (
+      window.confirm(
+        'Si está seguro que desea asistir, confirme para finalizar'
+      )
+    ) {
+      const request: ReservationDTO = {
+        IDAlumno: this.sessionController.getItem().IDPersonal,
+        materias: ConvertSubjectToMateria(this.subjects),
+      };
+      try {
+        await this.reservationController.createReservation(request);
+        alert(
+          'Se ha registrado tu reserva sastisfactoriamente y se ha enviado un código QR a tu correo, que deberás presentar para acceder a la facultad'
+        );
+        this.router.navigateByUrl('inicio-alumno');
+      } catch (error) {
+        alert(
+          'Ha ocurrido un error al registrar tu reserva, intenténtalo de nuevo'
+        );
+      }
+    }
+  }
+
+  public cancelar() {
     this.router.navigateByUrl('inicio-alumno');
   }
 }
