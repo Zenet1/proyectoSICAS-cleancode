@@ -67,9 +67,8 @@ export class CapturaPreguntasComponent implements OnInit {
     this.trimForm();
     this.questionController.createQuestion(this.formPregunta.value).then(
       (respuesta) => {
-        console.log(this.formPregunta.value);
-        this.obtenerPreguntas(); // Actualizar la lista de preguntas
-        this.formPregunta.reset(); // Limpiar el formulario después de guardar la pregunta
+        this.obtenerPreguntas();
+        this.formPregunta.reset();
       },
       (error) => {
         alert('Ha ocurrido un error al guardar la pregunta');
