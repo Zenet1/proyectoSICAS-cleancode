@@ -5,7 +5,6 @@ export interface CreateClassroomDTO {
 }
 
 export interface UpdateClassroomDTO {
-    id: number,
     nombre?: string,
     id_edificio?: number,
     capacidad?: number

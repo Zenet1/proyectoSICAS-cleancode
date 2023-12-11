@@ -5,7 +5,6 @@ export interface CreateOfficeDTO {
 }
 
 export interface UpdateOfficeDTO {
-    id: number,
     nombre?: string,
     departamento?: string,
     id_edificio?: number
