@@ -48,7 +48,7 @@ export class AsistenciaExternoComponent implements OnInit {
     return this.externalAssistanceForm.get('oficinas') as FormArray;
   }
 
-  private get fechaAsistencia() {
+  private get assistanceDate() {
     return this.externalAssistanceForm.get('fechaAsistencia');
   }
 
@@ -81,7 +81,7 @@ export class AsistenciaExternoComponent implements OnInit {
       const agendaDTO: AgendaDTO = {
         IDExterno: this.visitorController.getItem().IDExterno,
         correo: this.visitorController.getItem().correo,
-        fecha_agenda: this.formatDate(this.fechaAsistencia.value),
+        fecha_agenda: this.formatDate(this.assistanceDate.value),
         oficinas: selectedOffices,
       };
       try {
@@ -117,7 +117,7 @@ export class AsistenciaExternoComponent implements OnInit {
 
   private validDate (): boolean {
     const currentDate = new Date();
-    const selectedDate = new Date(this.fechaAsistencia.value);
+    const selectedDate = new Date(this.assistanceDate.value);
     const validDate = selectedDate >= currentDate;
     return validDate;
   }
