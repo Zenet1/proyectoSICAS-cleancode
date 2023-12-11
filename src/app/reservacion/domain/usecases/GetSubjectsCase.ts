@@ -1,4 +1,4 @@
-import { ReservationGateway } from '../../infraestructure/gateways/ReservationGateway';
+import { ReservationGateway } from '../../infraestructure/Gateways/ReservationGateway';
 import { ISubject } from '../interfaces/ISubject';
 import { CheckReservationCase } from './CheckReservationCase';
 
@@ -7,7 +7,8 @@ export class GetSubjectsCase {
 
   public async getAvailablesSubjects(studentID: number) {
     const hasReservation = await new CheckReservationCase(this.reservationGateway).validatePreviousReservation(studentID);
-    if(!hasReservation) throw new Error('User Has Reservation');
+    console.log(hasReservation);
+    if(hasReservation) throw new Error('User Has Reservation');
     const subjects = await this.subjectGateway.getByStudentId(studentID);
     if (subjects === null) throw new Error('No Subjects Available');
     return subjects;

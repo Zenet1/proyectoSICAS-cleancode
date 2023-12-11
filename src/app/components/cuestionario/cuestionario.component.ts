@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { AnswerDTO } from 'src/app/chequeo/domain/dtos/AnswerDTO';
 import { FilteredAnswersDTO } from 'src/app/chequeo/domain/dtos/FilteredAnswersDTO';
 import { FilteredQuestionsDTO } from 'src/app/chequeo/domain/dtos/FilteredQuestionsDTO';
+import { QuestionDTO } from 'src/app/chequeo/domain/dtos/QuestionDTO';
 import { convertToFilteredAnswers } from 'src/app/chequeo/domain/mappers/ConvertToFilteredAnswers';
 import { HealtCheckController } from 'src/app/chequeo/infraestructure/controllers/HealtCheckController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
 import { AccountDataDTO } from 'src/app/sesion/domain/dto/AccountDataDTO';
-import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
+import { SessionController } from 'src/app/sesion/infraestructure/controllers/SessionController';
 
 @Component({
   selector: 'app-cuestionario',
@@ -19,8 +20,8 @@ import { SessionController } from 'src/app/sesion/infraestructure/SessionControl
 export class CuestionarioComponent implements OnInit {
   cuestionario: FormGroup;
   estaLogueado: boolean;
-  mainQuestions: any;
-  secondaryQuestions: any;
+  mainQuestions: QuestionDTO[];
+  secondaryQuestions: QuestionDTO[];
   flags: boolean[] = [];
 
   constructor(

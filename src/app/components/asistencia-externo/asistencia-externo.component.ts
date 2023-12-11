@@ -1,11 +1,10 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgendaDTO } from 'src/app/agenda/domain/dtos/AgendaDTO';
 import { OfficeDTO, OfficeIdDTO } from 'src/app/agenda/domain/dtos/OfficeDTO';
 import { AgendaController } from 'src/app/agenda/infraestructure/AgendaController';
-import { VisitorController } from 'src/app/registro-externo/intraestructure/VisitorController';
+import { VisitorController } from 'src/app/registro-externo/intraestructure/controllers/VisitorController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
 
 @Component({

@@ -1,5 +1,4 @@
-import { VirtualTimeScheduler } from 'rxjs';
-import { GetVisitorIDResponse, VisitorDTO } from '../../domain/dtos/VisitorDTO';
+import { GetVisitorIDResponse, VisitorDTO, VisitorSessionDTO } from '../../domain/dtos/VisitorDTO';
 import { convertToVisitorSession } from '../../domain/mappers/ConvertToVisitorSession';
 import { RegisterVisitorCase } from '../../domain/usecases/RegisterVisitorCase';
 import { visitorGateway } from '../gateways/VisitorGateway';
@@ -13,7 +12,7 @@ export class VisitorController {
     sessionStorage.setItem('externo', JSON.stringify(visitorSession));
   }
 
-  public getItem (): GetVisitorIDResponse {
+  public getItem (): VisitorSessionDTO {
     return JSON.parse(sessionStorage.getItem('externo'));
   }
 }

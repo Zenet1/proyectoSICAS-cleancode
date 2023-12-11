@@ -5,7 +5,7 @@ import { SubjectDTO } from 'src/app/reservacion/domain/dtos/SubjectDTO';
 import { ConvertSubjectToMateria } from 'src/app/reservacion/domain/mappers/ConvertSubjectToMateria';
 import { ReservationController } from 'src/app/reservacion/infraestructure/controllers/ReservationController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
-import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
+import { SessionController } from 'src/app/sesion/infraestructure/controllers/SessionController';
 
 @Component({
   selector: 'app-asistencia-alumno',
