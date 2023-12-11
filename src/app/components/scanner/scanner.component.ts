@@ -2,15 +2,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { CapturadorService } from 'src/app/services/capturador/capturador.service';
+import { ValidateController } from '../../validacion/infraestructure/ValidateController';
 
 @Component({
   selector: 'app-scanner',
   templateUrl: './scanner.component.html',
-  styleUrls: ['./scanner.component.css']
+  styleUrls: ['./scanner.component.css'],
+  providers: [ValidateController],
 })
 export class ScannerComponent implements OnInit {
   @ViewChild('escaner', {static: false})
-  scanner: ZXingScannerComponent;
+    scanner: ZXingScannerComponent;
 
   tieneCamaras = false;
   tienePermisos: boolean;
@@ -21,7 +23,7 @@ export class ScannerComponent implements OnInit {
   resultadoValidacion:boolean;
   nombreAlumno:string;
 
-  constructor(private servicioCapturador:CapturadorService, private router:Router) { }
+  constructor(private validateController: ValidateController, private router:Router) { }
 
   ngOnInit(): void {
     
@@ -35,16 +37,16 @@ export class ScannerComponent implements OnInit {
   }
 
   enSeleccionCamara(selected){
-    const device = this.camarasDisponibles.find(x => x.deviceId === selected);
+    const device = this.camarasDisponibles.find((x) => x.deviceId === selected);
     this.camaraSeleccionada = device || null;
   }
 
   verificar(){
     if(this.resultadoEscaneo != null){
-      this.servicioCapturador.verficar(this.resultadoEscaneo).subscribe(
-        respuesta =>{
-          if(respuesta.respuesta === "valido"){
-            this.nombreAlumno = respuesta.NombreCompleto;
+      this.validateController.check(this.resultadoEscaneo).then(
+        (respuesta) =>{
+          if(respuesta){
+            this.nombreAlumno = 'welcome';
             this.resultadoValidacion = true;
           } else {
             this. resultadoValidacion = false;
@@ -75,10 +77,10 @@ export class ScannerComponent implements OnInit {
   }
 
   camerasNotFoundHandler(event){
-    alert("No se han detectado cámaras disponibles en este dispositivo");
+    alert('No se han detectado cámaras disponibles en este dispositivo');
   }
 
   scanErrorHandler(event){
-    alert("Ocurrió un error, asegúrese que ha proporcionado los permisos necesarios");
+    alert('Ocurrió un error, asegúrese que ha proporcionado los permisos necesarios');
   }
 }
