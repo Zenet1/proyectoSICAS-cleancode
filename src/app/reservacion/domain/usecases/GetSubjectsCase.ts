@@ -1,4 +1,4 @@
-import { ReservationGateway } from '../../infraestructure/ReservationGateway';
+import { ReservationGateway } from '../../infraestructure/gateways/ReservationGateway';
 import { ISubject } from '../interfaces/ISubject';
 import { CheckReservationCase } from './CheckReservationCase';
 

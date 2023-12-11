@@ -1,4 +1,4 @@
-import { ReservationDTO } from '../domain/dtos/ReservationDTO';
+import { ReservationDTO } from '../../domain/dtos/ReservationDTO';
 
 export class ReservationGateway {
   createReservation(reservationData: ReservationDTO): Promise<boolean | null> {

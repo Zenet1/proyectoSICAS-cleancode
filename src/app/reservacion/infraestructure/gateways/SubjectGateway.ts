@@ -1,6 +1,6 @@
 import { formatTime } from 'src/app/utils/FormatTime';
-import { SubjectDTO } from '../domain/dtos/SubjectDTO';
-import { ISubject } from '../domain/interfaces/ISubject';
+import { SubjectDTO } from '../../domain/dtos/SubjectDTO';
+import { ISubject } from '../../domain/interfaces/ISubject';
 
 export class SubjectGateway implements ISubject {
   getByStudentId(studentID: number): Promise<SubjectDTO[] | null> {

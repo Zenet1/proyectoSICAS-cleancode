@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ReservationDTO } from 'src/app/reservacion/domain/dtos/ReservationDTO';
 import { SubjectDTO } from 'src/app/reservacion/domain/dtos/SubjectDTO';
 import { ConvertSubjectToMateria } from 'src/app/reservacion/domain/mappers/ConvertSubjectToMateria';
-import { ReservationController } from 'src/app/reservacion/infraestructure/ReservationController';
+import { ReservationController } from 'src/app/reservacion/infraestructure/controllers/ReservationController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
 import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
 

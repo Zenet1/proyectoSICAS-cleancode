@@ -1,10 +1,10 @@
-import { ReservationDTO } from '../domain/dtos/ReservationDTO';
-import { SubjectDTO } from '../domain/dtos/SubjectDTO';
-import { CheckReservationCase } from '../domain/usecases/CheckReservationCase';
-import { CreateReservationCase } from '../domain/usecases/CreateReservationCase';
-import { GetSubjectsCase } from '../domain/usecases/GetSubjectsCase';
-import { ReservationGateway } from './ReservationGateway';
-import { SubjectGateway } from './SubjectGateway';
+import { ReservationDTO } from '../../domain/dtos/ReservationDTO';
+import { SubjectDTO } from '../../domain/dtos/SubjectDTO';
+import { CheckReservationCase } from '../../domain/usecases/CheckReservationCase';
+import { CreateReservationCase } from '../../domain/usecases/CreateReservationCase';
+import { GetSubjectsCase } from '../../domain/usecases/GetSubjectsCase';
+import { ReservationGateway } from '../gateways/ReservationGateway';
+import { SubjectGateway } from '../gateways/SubjectGateway';
 
 export class ReservationController {
   public async getSubjects(studentID: number): Promise<SubjectDTO[]> {
