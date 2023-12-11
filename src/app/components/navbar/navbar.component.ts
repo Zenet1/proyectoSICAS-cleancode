@@ -1,21 +1,22 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { LoginService } from 'src/app/services/login/login.service';
+import { Component } from '@angular/core';
+import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
+  providers: [SessionController],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   
-  constructor(public servicioLogin:LoginService) { }
+  constructor(private sessionController: SessionController) { }
 
-  ngOnInit(): void {
-    
+  public isLoggedIn () {
+    return this.sessionController.isLoggedIn();
   }
 
-  cerrarSesion(){
-    this.servicioLogin.deleteToken();
+  public logout(){
+    this.sessionController.logout();
     location.href = '#/login';
   }
 }
