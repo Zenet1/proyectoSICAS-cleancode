@@ -7,13 +7,13 @@
     </div>
     <div class="wrapper-cuestionario row g-0">
         <div class="container-cuestionario">
-            <form [formGroup]="cuestionario" (ngSubmit)="enviar()" ngNativeValidate>
-                <ng-container *ngFor="let question of pregPrimarias; let i = index">
+            <form [formGroup]="cuestionario" (ngSubmit)="validQuestions()" ngNativeValidate>
+                <ng-container *ngFor="let question of mainQuestions; let i = index">
                     <div formArrayName="preguntas" class="form-group" >
                         <div [formGroupName]="i">
                             <div class="mb-3">
                                 <label for="pregunta_{{i+1}}" class="form-label">{{question.Pregunta}}</label>
-                                <select id="pregunta_{{i+1}}" formControlName="respuesta" (change)="eleccion($event.target.value, i)" class="form-select" required>
+                                <select id="pregunta_{{i+1}}" formControlName="respuesta" (change)="election($event.target.value, i)" class="form-select" required>
                                     <option value="si">Si</option>
                                     <option value="no">No</option>
                                 </select>
@@ -22,8 +22,8 @@
                             
                         </div>
                     </div>
-                    <ng-container *ngIf="banderas[i]">
-                        <div  formArrayName="preguntasSecundarias" class="form-group" *ngFor="let questionSec of pregSecundarias; let j = index">
+                    <ng-container *ngIf="flags[i]">
+                        <div  formArrayName="preguntasSecundarias" class="form-group" *ngFor="let questionSec of secondaryQuestions; let j = index">
                             <div *ngIf="questionSec.Enlace == question.IDPregunta" [formGroupName]="j">
                                 <div class="mb-3">
                                     <label for="pregunta_{{j+1}}" class="form-label">{{questionSec.Pregunta}}</label>
@@ -40,7 +40,7 @@
                 <div class="container-boton">
                     <div class="btn-group">
                         <button type="submit" class="btn btn-enviar">Enviar</button>
-                        <button type="button" (click)="cancelar()" class="btn btn-danger">Cancelar</button>
+                        <button type="button" (click)="cancel()" class="btn btn-danger">Cancelar</button>
                     </div>
                 </div>
             </form>
