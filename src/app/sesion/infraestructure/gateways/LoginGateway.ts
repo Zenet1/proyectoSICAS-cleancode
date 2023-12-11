@@ -1,6 +1,6 @@
-import { AccountDataDTO } from '../domain/dto/AccountDataDTO';
-import { CredentialsDTO } from '../domain/dto/CredentialDTO';
-import { ILogin } from '../domain/interfaces/ILogin';
+import { AccountDataDTO } from '../../domain/dto/AccountDataDTO';
+import { CredentialsDTO } from '../../domain/dto/CredentialDTO';
+import { ILogin } from '../../domain/interfaces/ILogin';
 
 export class LoginGateway implements ILogin {
   AuthByCredentials(credentials: CredentialsDTO): Promise<AccountDataDTO | null> {

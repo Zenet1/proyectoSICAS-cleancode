@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
+import { SessionController } from 'src/app/sesion/infraestructure/controllers/SessionController';
 
 @Component({
   selector: 'app-navbar',

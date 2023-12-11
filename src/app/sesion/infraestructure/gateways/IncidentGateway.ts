@@ -1,5 +1,5 @@
-import { IncidentDTO } from '../domain/dto/IncidentDTO';
-import { IIncident } from '../domain/interfaces/IIncident';
+import { IncidentDTO } from '../../domain/dto/IncidentDTO';
+import { IIncident } from '../../domain/interfaces/IIncident';
 
 export class IncidentGateway implements IIncident {
   find(studentID: number): Promise<IncidentDTO> {

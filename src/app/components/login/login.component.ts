@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
-import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
+import { SessionController } from 'src/app/sesion/infraestructure/controllers/SessionController';
 import { AccountDataDTO } from 'src/app/sesion/domain/dto/AccountDataDTO';
 
 @Component({

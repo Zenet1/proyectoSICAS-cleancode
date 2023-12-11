@@ -1,8 +1,8 @@
-import { AccountDataDTO } from '../domain/dto/AccountDataDTO';
-import { CredentialsDTO } from '../domain/dto/CredentialDTO';
-import { LoginCase } from '../domain/usecase/SesionCase';
-import { IncidentGateway } from './IncidentGateway';
-import { LoginGateway } from './LoginGateway';
+import { AccountDataDTO } from '../../domain/dto/AccountDataDTO';
+import { CredentialsDTO } from '../../domain/dto/CredentialDTO';
+import { LoginCase } from '../../domain/usecases/SesionCase';
+import { IncidentGateway } from '../gateways/IncidentGateway';
+import { LoginGateway } from '../gateways/LoginGateway';
 
 export class SessionController {
   public async login(credentials: CredentialsDTO): Promise<AccountDataDTO> {
