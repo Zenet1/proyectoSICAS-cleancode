@@ -1,7 +1,7 @@
-import { FilteredQuestionsDTO } from '../domain/dtos/FilteredQuestionsDTO';
-import { QuestionsGateway } from './QuestionsGateway';
-import { HealtCheckQuestionsCase } from '../domain/usecase/HealtCheckQuestionsCase';
-import { FilteredAnswersDTO } from '../domain/dtos/FilteredAnswersDTO';
+import { FilteredQuestionsDTO } from '../../domain/dtos/FilteredQuestionsDTO';
+import { QuestionsGateway } from '../gateways/QuestionsGateway';
+import { HealtCheckQuestionsCase } from '../../domain/usecase/HealtCheckQuestionsCase';
+import { FilteredAnswersDTO } from '../../domain/dtos/FilteredAnswersDTO';
 
 export class HealtCheckController {
   public async checkQuestions(answers: FilteredAnswersDTO) {

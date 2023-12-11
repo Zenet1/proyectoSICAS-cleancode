@@ -1,5 +1,5 @@
-import { FilteredQuestionsDTO } from '../domain/dtos/FilteredQuestionsDTO';
-import { IQuestions } from '../domain/interfaces/IQuestions';
+import { FilteredQuestionsDTO } from '../../domain/dtos/FilteredQuestionsDTO';
+import { IQuestions } from '../../domain/interfaces/IQuestions';
 
 export class QuestionsGateway implements IQuestions {
   getAll(): Promise<FilteredQuestionsDTO | null> {

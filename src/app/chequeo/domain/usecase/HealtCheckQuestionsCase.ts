@@ -1,4 +1,4 @@
-import { QuestionsGateway } from '../../infraestructure/QuestionsGateway';
+import { QuestionsGateway } from '../../infraestructure/gateways/QuestionsGateway';
 import { FilteredAnswersDTO } from '../dtos/FilteredAnswersDTO';
 import { FilteredQuestionsDTO } from '../dtos/FilteredQuestionsDTO';
 

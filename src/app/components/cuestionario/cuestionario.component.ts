@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { AnswerDTO } from 'src/app/chequeo/domain/dtos/AnswerDTO';
 import { FilteredAnswersDTO } from 'src/app/chequeo/domain/dtos/FilteredAnswersDTO';
 import { FilteredQuestionsDTO } from 'src/app/chequeo/domain/dtos/FilteredQuestionsDTO';
-import { HealtCheckController } from 'src/app/chequeo/infraestructure/HealtCheckController';
+import { convertToFilteredAnswers } from 'src/app/chequeo/domain/mappers/ConvertToFilteredAnswers';
+import { HealtCheckController } from 'src/app/chequeo/infraestructure/controllers/HealtCheckController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
 import { AccountDataDTO } from 'src/app/sesion/domain/dto/AccountDataDTO';
 import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
@@ -86,24 +87,7 @@ export class CuestionarioComponent implements OnInit {
     }
   }
 
-  private addQuestionsFields(cantidad: any, campo: any) {
-    for (let index = 0; index < cantidad; index++) {
-      const preguntaFormGroup = this.formBuilder.group({
-        respuesta: [''],
-      });
-      campo.push(preguntaFormGroup);
-    }
-  }
-
-  private get formQuestions(): FormArray {
-    return this.cuestionario.get('preguntas') as FormArray;
-  }
-
-  private get secondaryFormQuestions(): FormArray {
-    return this.cuestionario.get('preguntasSecundarias') as FormArray;
-  }
-
-  eleccion(event, i) {
+  election(event, i) {
     if (this.mainQuestions[i].Respuesta != event) {
       this.flags[i] = true;
     } else {
@@ -112,45 +96,19 @@ export class CuestionarioComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  formatMainQuestions(formArray: FormArray): AnswerDTO[] {
-    return formArray.controls.map((control: FormGroup, index: number) => ({
-      question: this.mainQuestions[index].Pregunta,
-      answer: control.get('respuesta').value,
-    }));
-  }
-
-  formatSecondaryQuestions(formArray: FormArray): AnswerDTO[] {
-    return formArray.controls.map((control: FormGroup, index: number) => ({
-      question: this.secondaryQuestions[index].Pregunta,
-      answer: control.get('respuesta').value,
-    }));
-  }
-
-  formatQuestions(): FilteredAnswersDTO {
-    const respuestas: AnswerDTO[] = this.formatMainQuestions(
-      this.formQuestions
-    );
-    const respuestasSecundarias: AnswerDTO[] = this.formatSecondaryQuestions(
-      this.secondaryFormQuestions
-    );
-    const formatQuestions: FilteredAnswersDTO = {
-      primarias: respuestas,
-      secundarias: respuestasSecundarias,
-    };
-    return formatQuestions;
-  }
-
   public async validQuestions() {
     if (
       window.confirm(
         'Si está seguro de sus respuestas, confirme para continuar'
       )
     ) {
-      const formatQuestions: FilteredAnswersDTO = this.formatQuestions();
+      const formatQuestions: FilteredAnswersDTO = convertToFilteredAnswers(
+        this.formatMainQuestions(this.formQuestions),
+        this.formatSecondaryQuestions(this.secondaryFormQuestions)
+      );
       try {
-        const canAccess: boolean = await this.healtCheckController.checkQuestions(
-          formatQuestions
-        );
+        const canAccess: boolean =
+          await this.healtCheckController.checkQuestions(formatQuestions);
         if (canAccess) {
           this.servicioCookie.setCookie('cuestionarioContestado', 'si');
           this.estaLogueado = this.sessionController.isLoggedIn();
@@ -176,6 +134,29 @@ export class CuestionarioComponent implements OnInit {
     this.router.navigateByUrl('login');
   }
 
+  private addQuestionsFields(cantidad: any, campo: any) {
+    for (let index = 0; index < cantidad; index++) {
+      const preguntaFormGroup = this.formBuilder.group({
+        respuesta: [''],
+      });
+      campo.push(preguntaFormGroup);
+    }
+  }
+
+  private formatMainQuestions(formArray: FormArray): AnswerDTO[] {
+    return formArray.controls.map((control: FormGroup, index: number) => ({
+      question: this.mainQuestions[index].Pregunta,
+      answer: control.get('respuesta').value,
+    }));
+  }
+
+  private formatSecondaryQuestions(formArray: FormArray): AnswerDTO[] {
+    return formArray.controls.map((control: FormGroup, index: number) => ({
+      question: this.secondaryQuestions[index].Pregunta,
+      answer: control.get('respuesta').value,
+    }));
+  }
+
   private routerHandle(rol: string) {
     const routes = {
       Alumno: 'asistencia-alumno',
@@ -184,5 +165,13 @@ export class CuestionarioComponent implements OnInit {
     };
     const route = routes[rol];
     this.router.navigateByUrl(route);
+  }
+
+  private get formQuestions(): FormArray {
+    return this.cuestionario.get('preguntas') as FormArray;
+  }
+
+  private get secondaryFormQuestions(): FormArray {
+    return this.cuestionario.get('preguntasSecundarias') as FormArray;
   }
 }

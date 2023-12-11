@@ -13,7 +13,7 @@
                         <div [formGroupName]="i">
                             <div class="mb-3">
                                 <label for="pregunta_{{i+1}}" class="form-label">{{question.Pregunta}}</label>
-                                <select id="pregunta_{{i+1}}" formControlName="respuesta" (change)="eleccion($event.target.value, i)" class="form-select" required>
+                                <select id="pregunta_{{i+1}}" formControlName="respuesta" (change)="election($event.target.value, i)" class="form-select" required>
                                     <option value="si">Si</option>
                                     <option value="no">No</option>
                                 </select>
