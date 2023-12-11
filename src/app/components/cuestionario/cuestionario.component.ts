@@ -1,158 +1,188 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AnswerDTO } from 'src/app/chequeo/domain/dtos/AnswerDTO';
+import { FilteredAnswersDTO } from 'src/app/chequeo/domain/dtos/FilteredAnswersDTO';
+import { FilteredQuestionsDTO } from 'src/app/chequeo/domain/dtos/FilteredQuestionsDTO';
+import { HealtCheckController } from 'src/app/chequeo/infraestructure/HealtCheckController';
 import { CookieService } from 'src/app/services/cookie/cookie.service';
-import { CuestionarioService } from 'src/app/services/cuestionario/cuestionario.service';
-import { LoginService } from 'src/app/services/login/login.service';
+import { AccountDataDTO } from 'src/app/sesion/domain/dto/AccountDataDTO';
+import { SessionController } from 'src/app/sesion/infraestructure/SessionController';
 
 @Component({
   selector: 'app-cuestionario',
   templateUrl: './cuestionario.component.html',
-  styleUrls: ['./cuestionario.component.css']
+  styleUrls: ['./cuestionario.component.css'],
+  providers: [HealtCheckController, SessionController],
 })
 export class CuestionarioComponent implements OnInit {
-  cuestionario:FormGroup;
-  estaLogueado:boolean;
-  pregPrimarias:any;
-  pregSecundarias:any;
-  banderas:boolean[] = [];
-  
-  constructor(private cd:ChangeDetectorRef,private servicioCuestionario:CuestionarioService, private servicioLogin:LoginService, private servicioCookie:CookieService, private formBuilder: FormBuilder, private router:Router) {
+  cuestionario: FormGroup;
+  estaLogueado: boolean;
+  mainQuestions: any;
+  secondaryQuestions: any;
+  flags: boolean[] = [];
+
+  constructor(
+    private cd: ChangeDetectorRef,
+    private servicioCookie: CookieService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private healtCheckController: HealtCheckController,
+    private sessionController: SessionController
+  ) {
     this.cuestionario = this.formBuilder.group({
       preguntas: this.formBuilder.array([]),
-      preguntasSecundarias: this.formBuilder.array([]), 
+      preguntasSecundarias: this.formBuilder.array([]),
     });
   }
 
   ngOnInit(): void {
-    this.estaLogueado = this.servicioLogin.isLoggedIn();
-    if(this.estaLogueado){
-      switch(this.servicioLogin.getRol()) {
-        case "Administrador": { 
-          this.router.navigateByUrl('inicio-administrador');
-          break;
-        }
-        case "Capturador":{
-          this.router.navigateByUrl('inicio-capturador');
-          break;
-        }
-        case "Alumno":{
-          this.obtenerPreguntas();
-          break;
-        }
-        case "Profesor":{
-          this.obtenerPreguntas();
-          break;
-        }
-        case "Personal":{
-          this.obtenerPreguntas();
-          break;
-        }
+    this.estaLogueado = this.sessionController.isLoggedIn();
+    const session = this.sessionController.getItem();
+    if (this.estaLogueado) {
+      switch (session.Rol) {
+      case 'Administrador': {
+        this.router.navigateByUrl('inicio-administrador');
+        break;
+      }
+      case 'Capturador': {
+        this.router.navigateByUrl('inicio-capturador');
+        break;
+      }
+      case 'Alumno': {
+        this.getQuestions();
+        break;
+      }
+      case 'Profesor': {
+        this.getQuestions();
+        break;
+      }
+      case 'Personal': {
+        this.getQuestions();
+        break;
+      }
       }
     } else {
-      if(!this.servicioCookie.checkCookie("registroExterno")){
+      if (!this.servicioCookie.checkCookie('registroExterno')) {
         this.router.navigateByUrl('login');
       } else {
-        this.obtenerPreguntas();
+        this.getQuestions();
       }
     }
   }
 
-  obtenerPreguntas(){
-    this.servicioCuestionario.obtenerPreguntas().subscribe(
-      (respuesta:any)=>{
-        this.pregPrimarias = respuesta.primarias;
-        this.pregSecundarias = respuesta.secundarias;
-        this.agregarCamposPreguntas(this.pregPrimarias.length, this.preguntasForm);
-        this.agregarCamposPreguntas(this.pregSecundarias.length, this.pregSecundariasForm);
-        for(let index = 0; index<this.pregPrimarias.length; index++){
-          this.banderas.push(false);
-        }
-      }
+  public async getQuestions() {
+    const questions: FilteredQuestionsDTO =
+      await this.healtCheckController.getAll();
+    this.mainQuestions = questions.primarias;
+    this.secondaryQuestions = questions.secundarias;
+    this.addQuestionsFields(this.mainQuestions.length, this.formQuestions);
+    this.addQuestionsFields(
+      this.secondaryQuestions.length,
+      this.secondaryFormQuestions
     );
+    for (let index = 0; index < this.mainQuestions.length; index++) {
+      this.flags.push(false);
+    }
   }
 
-  agregarCamposPreguntas(cantidad:any, campo:any){
+  private addQuestionsFields(cantidad: any, campo: any) {
     for (let index = 0; index < cantidad; index++) {
       const preguntaFormGroup = this.formBuilder.group({
-        respuesta:['']
+        respuesta: [''],
       });
       campo.push(preguntaFormGroup);
     }
   }
 
-  get preguntasForm(){
+  private get formQuestions(): FormArray {
     return this.cuestionario.get('preguntas') as FormArray;
   }
 
-  get pregSecundariasForm(){
+  private get secondaryFormQuestions(): FormArray {
     return this.cuestionario.get('preguntasSecundarias') as FormArray;
   }
 
-  eleccion(event, i){
-    if(this.pregPrimarias[i].Respuesta != event){
-      this.banderas[i] = true;
+  eleccion(event, i) {
+    if (this.mainQuestions[i].Respuesta != event) {
+      this.flags[i] = true;
     } else {
-      this.banderas[i] = false;
+      this.flags[i] = false;
     }
     this.cd.detectChanges();
   }
 
-  enviar(){
-    if (window.confirm("Si está seguro de sus respuestas, confirme para continuar")) {
-      var cantidadIncorrecta:number = 0;
-      var tieneSecundarias:boolean = false;
-      for (let index = 0; index < this.preguntasForm.length; index++) {
-        if(this.preguntasForm.controls[index].get("respuesta").value != this.pregPrimarias[index].Respuesta){
-          for (let j = 0; j < this.pregSecundariasForm.length; j++) {
-            if(this.pregSecundarias[j].Enlace  == this.pregPrimarias[index].IDPregunta){
-              tieneSecundarias = true;
-              if(this.pregSecundariasForm.controls[j].get("respuesta").value  != ''){
-                if(this.pregSecundariasForm.controls[j].get("respuesta").value != this.pregSecundarias[j].Respuesta){
-                  cantidadIncorrecta++;
-                }
-              }
-            }
-          }
-          if(!tieneSecundarias){
-            cantidadIncorrecta++;
-          }
-        }
-        tieneSecundarias = false;
-      }
+  formatMainQuestions(formArray: FormArray): AnswerDTO[] {
+    return formArray.controls.map((control: FormGroup, index: number) => ({
+      question: this.mainQuestions[index].Pregunta,
+      answer: control.get('respuesta').value,
+    }));
+  }
 
-      if(cantidadIncorrecta > 0){
-        this.servicioCuestionario.rechazado().subscribe(
-          respuesta=>{
-            alert("De acuerdo a tus respuestas, no es posible que asistas a la facultad, se te ha notificado por correo electrónico");
-            this.router.navigateByUrl('login');
-          }
+  formatSecondaryQuestions(formArray: FormArray): AnswerDTO[] {
+    return formArray.controls.map((control: FormGroup, index: number) => ({
+      question: this.secondaryQuestions[index].Pregunta,
+      answer: control.get('respuesta').value,
+    }));
+  }
+
+  formatQuestions(): FilteredAnswersDTO {
+    const respuestas: AnswerDTO[] = this.formatMainQuestions(
+      this.formQuestions
+    );
+    const respuestasSecundarias: AnswerDTO[] = this.formatSecondaryQuestions(
+      this.secondaryFormQuestions
+    );
+    const formatQuestions: FilteredAnswersDTO = {
+      primarias: respuestas,
+      secundarias: respuestasSecundarias,
+    };
+    return formatQuestions;
+  }
+
+  public async validQuestions() {
+    if (
+      window.confirm(
+        'Si está seguro de sus respuestas, confirme para continuar'
+      )
+    ) {
+      const formatQuestions: FilteredAnswersDTO = this.formatQuestions();
+      try {
+        const canAccess: boolean = await this.healtCheckController.checkQuestions(
+          formatQuestions
         );
-      } else {
-        this.servicioCookie.setCookie("cuestionarioContestado", "si");
-        if(this.estaLogueado){
-          switch(this.servicioLogin.getRol()){
-            case "Alumno": {
-              this.router.navigateByUrl('asistencia-alumno');
-              break;
-            }
-            case "Profesor": {
-              this.router.navigateByUrl('asistencia-personal');
-              break;
-            }
-            case "Personal": {
-              this.router.navigateByUrl('asistencia-personal');
-              break;
-            }
+        if (canAccess) {
+          this.servicioCookie.setCookie('cuestionarioContestado', 'si');
+          this.estaLogueado = this.sessionController.isLoggedIn();
+          const session: AccountDataDTO = this.sessionController.getItem();
+          if (this.estaLogueado) {
+            this.routerHandle(session.Rol);
+          } else {
+            this.router.navigateByUrl('asistencia-externo');
           }
         } else {
-          this.router.navigateByUrl('asistencia-externo');
+          alert(
+            'De acuerdo a tus respuestas, no es posible que asistas a la facultad.'
+          );
+          this.router.navigateByUrl('login');
         }
+      } catch (error) {
+        alert('Error durante la verficación de las preguntas');
       }
     }
   }
 
-  cancelar(){
+  public cancel() {
     this.router.navigateByUrl('login');
+  }
+
+  private routerHandle(rol: string) {
+    const routes = {
+      Alumno: 'asistencia-alumno',
+      Personal: 'asistencia-personal',
+      Profesor: 'asistencia-personal',
+    };
+    const route = routes[rol];
+    this.router.navigateByUrl(route);
   }
 }
